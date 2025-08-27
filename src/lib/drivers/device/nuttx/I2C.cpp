@@ -108,7 +108,7 @@ I2C::init()
 	_dev = px4_i2cbus_initialize(get_device_bus());
 
 	if (_dev == nullptr) {
-		DEVICE_DEBUG("failed to init I2C");
+		PX4_ERR("failed to init I2C");
 		ret = -ENOENT;
 		goto out;
 	}
@@ -148,7 +148,7 @@ I2C::init()
 	ret = probe();
 
 	if (ret != OK) {
-		DEVICE_DEBUG("probe failed");
+		PX4_ERR("probe failed");
 		goto out;
 	}
 
@@ -156,13 +156,13 @@ I2C::init()
 	ret = CDev::init();
 
 	if (ret != OK) {
-		DEVICE_DEBUG("cdev init failed");
+		PX4_ERR("cdev init failed");
 		goto out;
 	}
 
 	// tell the world where we are
-	DEVICE_DEBUG("on I2C bus %d at 0x%02x (bus: %u KHz, max: %" PRIu32 " KHz)",
-		     get_device_bus(), get_device_address(), _bus_clocks[bus_index] / 1000, _frequency / 1000);
+	PX4_ERR("on I2C bus %d at 0x%02x (bus: %u KHz, max: %" PRIu32 " KHz)",
+		get_device_bus(), get_device_address(), _bus_clocks[bus_index] / 1000, _frequency / 1000);
 
 out:
 
@@ -216,7 +216,7 @@ I2C::transfer(const uint8_t *send, const unsigned send_len, uint8_t *recv, const
 		int ret_transfer = I2C_TRANSFER(_dev, &msgv[0], msgs);
 
 		if (ret_transfer != 0) {
-			DEVICE_DEBUG("I2C transfer failed, result %d", ret_transfer);
+			PX4_ERR("I2C transfer failed, result %d", ret_transfer);
 			ret = PX4_ERROR;
 
 		} else {
@@ -228,8 +228,8 @@ I2C::transfer(const uint8_t *send, const unsigned send_len, uint8_t *recv, const
 		// if we have already retried once, and we aren't going to give up, then reset the bus
 		if ((_retries > 0) && (retry_count < _retries)) {
 #if defined(CONFIG_I2C_RESET)
-			DEVICE_DEBUG("I2C bus: %d, Addr: %X, I2C_RESET %d/%d",
-				     get_device_bus(), get_device_address(), retry_count + 1, _retries);
+			PX4_ERR("I2C bus: %d, Addr: %X, I2C_RESET %d/%d",
+				get_device_bus(), get_device_address(), retry_count + 1, _retries);
 			I2C_RESET(_dev);
 #endif // CONFIG_I2C_RESET
 		}
