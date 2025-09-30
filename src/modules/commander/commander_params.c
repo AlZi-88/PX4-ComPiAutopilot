@@ -462,18 +462,6 @@ PARAM_DEFINE_FLOAT(COM_RC_STICK_OV, 30.0f);
 PARAM_DEFINE_INT32(COM_ARM_MIS_REQ, 0);
 
 /**
- * Position mode navigation loss response
- *
- * This sets the flight mode that will be used if navigation accuracy is no longer adequate for position control in manual Position mode.
- *
- * @value 0 Altitude mode
- * @value 1 Land mode (descend)
- *
- * @group Commander
- */
-PARAM_DEFINE_INT32(COM_POSCTL_NAVL, 0);
-
-/**
  * Require arm authorization to arm
  *
  * By default off. The default allows to arm the vehicle without a arm authorization.
@@ -625,11 +613,12 @@ PARAM_DEFINE_INT32(NAV_RCL_ACT, 2);
  * External modes requiring stick input will still failsafe.
  *
  * @min 0
- * @max 15
+ * @max 31
  * @bit 0 Mission
  * @bit 1 Hold
  * @bit 2 Offboard
  * @bit 3 External Mode
+ * @bit 4 Altitude Cruise
  * @group Commander
  */
 PARAM_DEFINE_INT32(COM_RCL_EXCEPT, 0);
